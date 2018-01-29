@@ -1,4 +1,4 @@
 module.exports = {
     secret: process.env.SECRET || 'notpublic',
-    database: 'mongodb://localhost:27017/ecmr'
+    database: 'mongodb://localhost:27017/tracking'
 };

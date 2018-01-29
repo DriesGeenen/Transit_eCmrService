@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const config = require('./config/config');
 const app = express();
 var router = express.Router();
-const User = require('./models/ecmr'); //created models loading here
-const userRoutes = require('./routes/ecmrRoutes');
+const tracking = require('./models/tracking'); //created models loading here
+const userRoutes = require('./routes/trackingRoutes');
 const jsonwebtoken = require("jsonwebtoken");
 const cors = require('cors');
 
