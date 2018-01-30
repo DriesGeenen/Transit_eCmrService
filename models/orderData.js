@@ -35,7 +35,7 @@ const orderDataSchema = mongoose.Schema({
         required: true
     },
     goods: {
-        type: Array,
+        type: [String],
         required: true
     }
 });
