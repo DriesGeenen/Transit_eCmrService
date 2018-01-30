@@ -4,15 +4,16 @@ var mongoose = require('mongoose');
 var Ecmr = mongoose.model('Ecmr');
 
 exports.getAllEcmrs = function () {
-    return Ecmr.find({}).select('-password');
+    return Ecmr.find({});
 };
 
 exports.getEcmrById = function (id) {
-    return Ecmr.findById(id).select('-password');
+    return Ecmr.findById(id);
 };
 
-exports.getEcmrByEmail = function (email) {
-    return Ecmr.findOne({email: email});
+exports.getEcmrsByUserId = function (userId) {
+    // return Ecmr.findOne({user: userId}).select('-user');
+    return Ecmr.find({user: userId})
 };
 
 exports.addEcmr = function (newEcmr) {

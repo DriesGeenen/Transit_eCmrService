@@ -5,6 +5,7 @@ const Point = require('./point');
 const Autographs = require('./autographs');
 
 const ecmrSchema = mongoose.Schema({
+    user: String, // Ingevuld door RFID scan systeem
     setup: Point,
     sender: Contact,
     receiver: Contact,

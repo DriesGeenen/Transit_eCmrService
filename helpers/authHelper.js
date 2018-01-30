@@ -14,8 +14,9 @@ exports.adminRequired = function(req, res, next) {
     }
 };
 
-exports.adminOrSelfRequired = function(req, res, next) {
-    if (req.user && (req.user.data.role === "admin" || req.user.data._id === req.params.id)) {
+exports.adminOrOwnRequired = function(req, res, next) {
+    // todo make a working function
+    if (req.user) {
         next();
     } else {
         return res.status(401).json({ message: 'Unauthorized user or administrator!' });

@@ -12,6 +12,24 @@ exports.getAllEcmrs = function (req, res) {
     });
 };
 
+exports.getEcmrById = function (req, res) {
+    var promise = EcmrRepository.getEcmrById(req.params.id);
+    promise.then(function (ecmr) {
+        return res.json({success: true, data: ecmr});
+    }, function (err) {
+        return res.status(500).json({success: false, msg: 'Failed to get e-CMR', error: err});
+    });
+};
+
+exports.getEcmrsByLoggedInUser = function (req, res) {
+    var promise = EcmrRepository.getEcmrsByUserId(req.user.data._id);
+    promise.then(function (ecmr) {
+        return res.json({success: true, data: ecmr});
+    }, function (err) {
+        return res.status(500).json({success: false, msg: 'Failed to get e-CMR', error: err});
+    });
+};
+
 exports.addEcmr = function (req, res) {
     var newEcmr = new Ecmr(req.body);
     var promise = EcmrRepository.addEcmr(newEcmr);
@@ -28,15 +46,6 @@ exports.updateEcmr = function (req, res) {
         return res.json({success: true, msg: 'Ecmr updated'});
     }, function (err) {
         return res.status(500).json({success: false, msg: 'Failed to update e-CMR', error: err});
-    });
-};
-
-exports.getEcmrById = function (req, res) {
-    var promise = EcmrRepository.getEcmrById(req.params.id);
-    promise.then(function (ecmr) {
-        return res.json({success: true, data: ecmr});
-    }, function (err) {
-        return res.status(500).json({success: false, msg: 'Failed to get e-CMR', error: err});
     });
 };
 

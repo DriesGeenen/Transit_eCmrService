@@ -4,13 +4,16 @@ module.exports = function (app) {
     var EcmrController = require('../controllers/ecmrController');
     var AuthHelper = require('../helpers/authHelper');
 
-    app.route('/users')
+    app.route('/ecmrs')
         .get(AuthHelper.adminRequired, EcmrController.getAllEcmrs)
         .post(AuthHelper.rfidToCmrRequired, EcmrController.addEcmr);
 
-    app.route('/users/:id')
-        .get(EcmrController.getEcmrById)
-        .delete(EcmrController.deleteEcmr)
-        .put(EcmrController.updateEcmr);
+    // todo improve security for get
+    app.route('/ecmrs/:id')
+        .get(AuthHelper.adminOrOwnRequired, EcmrController.getEcmrById)
+        .delete(AuthHelper.adminRequired, EcmrController.deleteEcmr)
+        .put(AuthHelper.adminRequired, EcmrController.updateEcmr);
 
+    app.route('/ecmrs/mine')
+        .get(EcmrController.getEcmrsByLoggedInUser);
 };
