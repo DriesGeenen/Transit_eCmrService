@@ -4,13 +4,13 @@ const mongoose = require('mongoose');
 const config = require('./config/config');
 const app = express();
 var router = express.Router();
-const orderData = require('./models/orderData'); //created models loading here
-const orderDataRoutes = require('./routes/orderDataRoutes');
+const User = require('./models/ecmr'); //created models loading here
+const userRoutes = require('./routes/ecmrRoutes');
 const jsonwebtoken = require("jsonwebtoken");
 const cors = require('cors');
 
 //Port number
-const port = process.env.PORT || 6602;
+const port = process.env.PORT || 6601;
 
 mongoose.connect(config.database);
 
@@ -39,7 +39,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-orderDataRoutes(app);
+userRoutes(app);
 
 //index route
 router.get('/', function (req, res) {
