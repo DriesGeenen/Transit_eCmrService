@@ -5,6 +5,22 @@ module.exports = function (app) {
     var AuthHelper = require('../helpers/authHelper');
 
     app.route('/ecmrs')
+        .get(EcmrController.getAllEcmrs)
+        .post(EcmrController.addEcmr);
+
+    // todo improve security for get
+    app.route('/ecmrs/:id')
+        .get(EcmrController.getEcmrById)
+        .delete(EcmrController.deleteEcmr)
+        .put(EcmrController.updateEcmr);
+
+    app.route('/ecmrs/mine')
+        .get(EcmrController.getEcmrsByLoggedInUser);
+
+    app.route('/ecmrs/many')
+        .post(EcmrController.addManyEcmrs);
+
+    /*app.route('/ecmrs')
         .get(AuthHelper.adminRequired, EcmrController.getAllEcmrs)
         .post(AuthHelper.rfidToCmrRequired, EcmrController.addEcmr);
 
@@ -16,4 +32,7 @@ module.exports = function (app) {
 
     app.route('/ecmrs/mine')
         .get(EcmrController.getEcmrsByLoggedInUser);
+
+    app.route('/ecmrs/generate')
+        .post(EcmrController.generateEcmr);*/
 };

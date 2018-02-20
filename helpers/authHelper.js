@@ -30,3 +30,11 @@ exports.rfidToCmrRequired = function(req, res, next) {
         return res.status(401).json({message: 'Unauthorized!'});
     }
 };
+
+exports.orderDataServiceRequired = function(req, res, next) {
+    if (req.user && req.user.data.role === "orderdataservice") {
+        next();
+    } else {
+        return res.status(401).json({message: 'Unauthorized!'});
+    }
+};

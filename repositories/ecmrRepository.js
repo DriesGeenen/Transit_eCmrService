@@ -27,3 +27,7 @@ exports.updateEcmr = function (id, ecmr) {
 exports.deleteEcmr = function (id) {
     return Ecmr.remove({_id: id});
 };
+
+exports.addManyEcmrs = function(ecmrArray){
+    return Ecmr.insertMany(ecmrArray);
+};

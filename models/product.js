@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Location = require('./location');
 
 module.exports = mongoose.Schema({
+    productCode: String,
     name: String,
-    location: Location
+    amount: Number
 });

@@ -58,3 +58,16 @@ exports.deleteEcmr = function (req, res) {
     });
 };
 
+
+//
+
+exports.addManyEcmrs = function(req, res){
+    var ecmrArray = req.body;
+    var promise = EcmrRepository.addManyEcmrs(ecmrArray);
+    promise.then(function (ecmr) {
+        return res.json({success: true, msg: 'Ecmrs created', data: ecmr});
+    }, function (err) {
+        return res.status(500).json({success: false, msg: 'Failed to create e-CMRs', error: err});
+    });
+};
+

@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
 const Contact = require('./contact');
-const Order = require('./order');
+const Location = require('./location');
+const Product = require('./product');
 const Point = require('./point');
 const Autographs = require('./autographs');
 
 const ecmrSchema = mongoose.Schema({
-    user: String, // Ingevuld door RFID scan systeem
-    setup: Point,
-    sender: Contact,
-    receiver: Contact,
-    deliveryLocation: Point,
-    mainTransporter: Contact,
-    reception: Point,
-    goods: [Order],
-    confirmedDelivery: Point,
+    driver: String, // Ingevuld door RFID scan systeem
+
+    setup: Point, // Date: now / name ? / location uit ConfigService
+    sender: Contact, // Uit orderData
+    receiver: Contact, // Uit orderData / Factuuradres
+    deliveryLocation: Location, // Uit orderData / Effectief leveradres / receiver
+    mainTransporter: Contact, // add ConfigService
+    reception: Point, // Date: geschatte leverdatum..? / == comfirmedDelivery?
+    goods: [Product], // Uit orderData
+    confirmedDelivery: Point, // Op papier in te vullen bij levering. / digitaal bijhouden?
     autographs: Autographs
 });
 
