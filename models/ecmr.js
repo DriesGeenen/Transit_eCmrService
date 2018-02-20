@@ -16,7 +16,11 @@ const ecmrSchema = mongoose.Schema({
     reception: Point, // Date: geschatte leverdatum..? / == comfirmedDelivery?
     goods: [Product], // Uit orderData
     confirmedDelivery: Point, // Op papier in te vullen bij levering. / digitaal bijhouden?
-    autographs: Autographs
+    autographs: Autographs,
+    finished: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const Ecmr = module.exports = mongoose.model('Ecmr', ecmrSchema);
