@@ -16,6 +16,14 @@ exports.getEcmrsByUserId = function (userId) {
     return Ecmr.find({user: userId})
 };
 
+exports.getFinishedEcmrsByDriverId = function (userId) {
+    return Ecmr.find({driver: userId, finished: true})
+};
+
+exports.getCurrentEcmrsByDriverId = function (userId) {
+    return Ecmr.find({driver: userId, finished: false})
+};
+
 exports.addEcmr = function (newEcmr) {
     return newEcmr.save();
 };
