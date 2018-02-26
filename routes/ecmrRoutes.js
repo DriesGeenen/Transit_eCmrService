@@ -20,6 +20,9 @@ module.exports = function (app) {
     app.route('/ecmrs/current/:id/')
         .get(EcmrController.getCurrentEcmrsByDriverid);
 
+    app.route('/ecmrs/update/:id')
+        .patch(EcmrController.updateEcmrToFinished);
+
     // todo improve security for get
     app.route('/ecmrs/:id')
         .get(EcmrController.getEcmrById)

@@ -48,6 +48,15 @@ exports.getCurrentEcmrsByDriverid = function (req, res) {
     });
 };
 
+exports.updateEcmrToFinished = function (req, res){
+    var promise = EcmrRepository.updateEcmrToFinished(req.params.id);
+    promise.then(function (ecmr) {
+        return res.json({success: true, data: ecmr});
+    }, function (err) {
+        return res.status(500).json({success: false, msg: 'Failed to update e-CMR', error: err});
+    });
+};
+
 exports.addEcmr = function (req, res) {
     var newEcmr = new Ecmr(req.body);
     var promise = EcmrRepository.addEcmr(newEcmr);

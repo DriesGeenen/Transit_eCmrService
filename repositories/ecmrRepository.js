@@ -32,6 +32,10 @@ exports.updateEcmr = function (id, ecmr) {
     return Ecmr.update({_id: id}, ecmr);
 };
 
+exports.updateEcmrToFinished = function(id){
+    return Ecmr.update({_id: id}, {finished: true});
+};
+
 exports.deleteEcmr = function (id) {
     return Ecmr.remove({_id: id});
 };
