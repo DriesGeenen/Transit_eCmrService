@@ -46,7 +46,7 @@ exports.getFinishedEcmrsByDriverid = function (req, res) {
 };
 
 exports.getCurrentEcmrsByDriverid = function (req, res) {
-    var promise = EcmrRepository.getCurrentEcmrsByDriverId(req.params.id);
+    const promise = EcmrRepository.getCurrentEcmrsByDriverId(req.params.id);
     promise.then(function (ecmrs) {
         return res.json({success: true, data: ecmrs});
     }, function (err) {
@@ -55,7 +55,7 @@ exports.getCurrentEcmrsByDriverid = function (req, res) {
 };
 
 exports.updateEcmrToFinished = function (req, res){
-    var promise = EcmrRepository.updateEcmrToFinished(req.params.id);
+    const promise = EcmrRepository.updateEcmrToFinished(req.params.id);
     promise.then(function (ecmr) {
         return res.json({success: true, data: ecmr});
     }, function (err) {
@@ -144,6 +144,7 @@ const filterEcmrForTracking = function(ecmr){
   return {
       driver: ecmr.driver,
       email:ecmr.receiver.email,
+      ecmrId: ecmr._id
       //telephone:ecmr.receiver.telephone
   }
 };
