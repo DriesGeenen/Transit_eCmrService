@@ -16,7 +16,9 @@
     "mongoose": "*",
     "multer": "^1.3.0",
     "passport": "*",
-    "passport-jwt": "*"
+    "passport-jwt": "*",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
   },
   "author": "Transit",
   "license": "ISC"

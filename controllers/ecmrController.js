@@ -1,10 +1,16 @@
 'use strict';
 
-var EcmrRepository = require('../repositories/ecmrRepository');
-var Ecmr = require('../models/ecmr');
+const EcmrRepository = require('../repositories/ecmrRepository');
+const Ecmr = require('../models/ecmr');
+
+const config = require('../config/config');
+const jwt = require('jsonwebtoken');
+const request = require('request-promise');
+
+const trackingServiceUrl = process.env.TRACKING_SERVICE_URL || 'http://localhost:6609/trackings';
 
 exports.getAllEcmrs = function (req, res) {
-    var promise = EcmrRepository.getAllEcmrs();
+    const promise = EcmrRepository.getAllEcmrs();
     promise.then(function (ecmrs) {
         return res.json({success: true, data: ecmrs});
     }, function (err) {
@@ -13,7 +19,7 @@ exports.getAllEcmrs = function (req, res) {
 };
 
 exports.getEcmrById = function (req, res) {
-    var promise = EcmrRepository.getEcmrById(req.params.id);
+    const promise = EcmrRepository.getEcmrById(req.params.id);
     promise.then(function (ecmr) {
         return res.json({success: true, data: ecmr});
     }, function (err) {
@@ -22,7 +28,7 @@ exports.getEcmrById = function (req, res) {
 };
 
 exports.getEcmrsByLoggedInUser = function (req, res) {
-    var promise = EcmrRepository.getEcmrsByUserId(req.user.data._id);
+    const promise = EcmrRepository.getEcmrsByUserId(req.user.data._id);
     promise.then(function (ecmr) {
         return res.json({success: true, data: ecmr});
     }, function (err) {
@@ -31,8 +37,8 @@ exports.getEcmrsByLoggedInUser = function (req, res) {
 };
 
 exports.addEcmr = function (req, res) {
-    var newEcmr = new Ecmr(req.body);
-    var promise = EcmrRepository.addEcmr(newEcmr);
+    const newEcmr = new Ecmr(req.body);
+    const promise = EcmrRepository.addEcmr(newEcmr);
     promise.then(function (ecmr) {
         return res.json({success: true, msg: 'Ecmr created', data: ecmr});
     }, function (err) {
@@ -41,7 +47,7 @@ exports.addEcmr = function (req, res) {
 };
 
 exports.updateEcmr = function (req, res) {
-    var promise = EcmrRepository.updateEcmr(req.params.id, req.body);
+    const promise = EcmrRepository.updateEcmr(req.params.id, req.body);
     promise.then(function () {
         return res.json({success: true, msg: 'Ecmr updated'});
     }, function (err) {
@@ -50,7 +56,7 @@ exports.updateEcmr = function (req, res) {
 };
 
 exports.deleteEcmr = function (req, res) {
-    var promise = EcmrRepository.deleteEcmr(req.params.id);
+    const promise = EcmrRepository.deleteEcmr(req.params.id);
     promise.then(function () {
         return res.json({success: true, msg: 'Ecmr removed'});
     }, function (err) {
@@ -62,12 +68,55 @@ exports.deleteEcmr = function (req, res) {
 //
 
 exports.addManyEcmrs = function(req, res){
-    var ecmrArray = req.body;
-    var promise = EcmrRepository.addManyEcmrs(ecmrArray);
-    promise.then(function (ecmr) {
-        return res.json({success: true, msg: 'Ecmrs created', data: ecmr});
+    const ecmrArray = req.body;
+    const promise = EcmrRepository.addManyEcmrs(ecmrArray);
+    promise.then(function () {
+        return requestGenerateTrackingCodes(filterEcmrArrayForTracking(ecmrArray));
     }, function (err) {
-        return res.status(500).json({success: false, msg: 'Failed to create e-CMRs', error: err});
+        console.log('Save CMR failed');
+        return res.status(500).json({success: false, msg: 'Failed to request save e-CMRs', error: err});
+    }).then(function(response){
+        return res.json({success: true, msg: 'Ecmrs created', data: JSON.parse(response).body});
+    }, function (err){
+        console.log('Tracking code generation failed');
+        console.log(err);
+        return res.status(200).json({success: false, msg: 'Failed to request tracking code generation', error: err});
+        return res.status(500).json({success: false, msg: 'Failed to request tracking code generation', error: err});
     });
 };
 
+const requestGenerateTrackingCodes = function (body) {
+    const options = {
+        url: trackingServiceUrl + '/generate',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': generateEcmrServiceToken()
+        },
+        body: JSON.stringify(body)
+    };
+    return request.post(options);
+};
+
+const generateEcmrServiceToken = function () {
+    return 'JWT ' + jwt.sign({
+        data: {role: 'ecmrservice'}
+    }, config.secret, {
+        expiresIn: 60
+    });
+};
+
+const filterEcmrArrayForTracking = function(ecmrArray){
+    const out = [];
+    for (let i = 0; i<ecmrArray.length;i++){
+        out.push(filterEcmrForTracking(ecmrArray[i]));
+    }
+    return out;
+};
+
+const filterEcmrForTracking = function(ecmr){
+  return {
+      driver: ecmr.driver,
+      email:ecmr.receiver.email,
+      //telephone:ecmr.receiver.telephone
+  }
+};
