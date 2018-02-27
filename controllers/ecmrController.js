@@ -36,6 +36,33 @@ exports.getEcmrsByLoggedInUser = function (req, res) {
     });
 };
 
+exports.getFinishedEcmrsByDriverid = function (req, res) {
+    var promise = EcmrRepository.getFinishedEcmrsByDriverId(req.params.id);
+    promise.then(function (ecmrs) {
+        return res.json({success: true, data: ecmrs});
+    }, function (err) {
+        return res.status(500).json({success: false, msg: 'Failed to get e-CMRs', error: err});
+    });
+};
+
+exports.getCurrentEcmrsByDriverid = function (req, res) {
+    var promise = EcmrRepository.getCurrentEcmrsByDriverId(req.params.id);
+    promise.then(function (ecmrs) {
+        return res.json({success: true, data: ecmrs});
+    }, function (err) {
+        return res.status(500).json({success: false, msg: 'Failed to get e-CMRs', error: err});
+    });
+};
+
+exports.updateEcmrToFinished = function (req, res){
+    var promise = EcmrRepository.updateEcmrToFinished(req.params.id);
+    promise.then(function (ecmr) {
+        return res.json({success: true, data: ecmr});
+    }, function (err) {
+        return res.status(500).json({success: false, msg: 'Failed to update e-CMR', error: err});
+    });
+};
+
 exports.addEcmr = function (req, res) {
     const newEcmr = new Ecmr(req.body);
     const promise = EcmrRepository.addEcmr(newEcmr);

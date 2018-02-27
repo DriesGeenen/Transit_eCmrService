@@ -8,17 +8,26 @@ module.exports = function (app) {
         .get(EcmrController.getAllEcmrs)
         .post(EcmrController.addEcmr);
 
-    // todo improve security for get
-    app.route('/ecmrs/:id')
-        .get(EcmrController.getEcmrById)
-        .delete(EcmrController.deleteEcmr)
-        .put(EcmrController.updateEcmr);
-
     app.route('/ecmrs/mine')
         .get(EcmrController.getEcmrsByLoggedInUser);
 
     app.route('/ecmrs/many')
         .post(EcmrController.addManyEcmrs);
+
+    app.route('/ecmrs/finished/:id/')
+        .get(EcmrController.getFinishedEcmrsByDriverid);
+
+    app.route('/ecmrs/current/:id/')
+        .get(EcmrController.getCurrentEcmrsByDriverid);
+
+    app.route('/ecmrs/update/:id')
+        .patch(EcmrController.updateEcmrToFinished);
+
+    // todo improve security for get
+    app.route('/ecmrs/:id')
+        .get(EcmrController.getEcmrById)
+        .delete(EcmrController.deleteEcmr)
+        .put(EcmrController.updateEcmr);
 
     /*app.route('/ecmrs')
         .get(AuthHelper.adminRequired, EcmrController.getAllEcmrs)
